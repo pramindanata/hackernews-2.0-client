@@ -17,8 +17,8 @@ const NavItems = (): JSX.Element => {
         <Nav.Link eventKey="/sign-in">Sign In</Nav.Link>
       </Nav.Item>
 
-      <Nav.Item className={`ml-1 ${styles.signUpNavItem}`}>
-        <button className="btn btn-light btn-sm">Sign Up</button>
+      <Nav.Item className={`ml-2 ${styles.signUpNavItem}`}>
+        <button className="btn btn btn-outline-light">Sign Up</button>
       </Nav.Item>
     </>
   )

@@ -2,6 +2,30 @@
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
 
+$theme-colors: (
+  "primary": #ff6600,
+  "secondary": #003399,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark
+);
+
+$btn-border-radius: 0;
+$btn-border-radius-lg: 0;
+$btn-border-radius-sm: 0;
+
+$input-border-radius: 0;
+$input-border-radius-lg:0;
+$input-border-radius-sm: 0;
+
+$card-border-radius: 0;
+
+$navbar-dark-color: rgba($white, .8);
+$navbar-dark-hover-color: rgba($white, .95);
+
 // Prefix `c` stand for `custom`
 $c-lg-breakpoint: map-get($grid-breakpoints, "lg");
 
@@ -25,7 +49,7 @@ $c-lg-breakpoint: map-get($grid-breakpoints, "lg");
   .app-navbar .mobile-nav-item.navbar-collapse.collapse {
     display: none!important;
   }
-  
+
   .app-navbar .mobile-nav-item {
     display: none!important;
   }
