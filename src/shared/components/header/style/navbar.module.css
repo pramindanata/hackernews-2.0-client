@@ -2,6 +2,10 @@
   justify-content: space-between!important;
 }
 
+.navbar {
+  min-height: 56px;
+}
+
 .searchWrapper {
   min-width: 300px;
 }
@@ -14,4 +18,8 @@
 .signUpNavItem {
   display: flex;
   align-items: center;
+}
+
+.signUpNavButton:hover {
+  color: #ff6600!important
 }

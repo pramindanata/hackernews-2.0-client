@@ -28,7 +28,9 @@ const Header = (): JSX.Element => {
           bg="primary"
           variant="dark"
           expand="lg"
-          className={`px-0 app-navbar ${bigNavbar && styles.navbarWrapper}`}
+          className={`px-0 app-navbar ${bigNavbar && styles.navbarWrapper} ${
+            styles.navbar
+          }`}
         >
           {!bigNavbar ? <MobileNav /> : <DesktopNav />}
         </Navbar>

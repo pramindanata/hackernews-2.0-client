@@ -1,12 +1,15 @@
 import React from 'react'
 import { Nav } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import styles from './style/navbar.module.css'
 
 const NavItems = (): JSX.Element => {
   return (
     <>
       <Nav.Item>
-        <Nav.Link eventKey="/news">News</Nav.Link>
+        <Nav.Link as={Link} to="/" eventKey="/news">
+          News
+        </Nav.Link>
       </Nav.Item>
 
       <Nav.Item>
@@ -14,11 +17,20 @@ const NavItems = (): JSX.Element => {
       </Nav.Item>
 
       <Nav.Item>
-        <Nav.Link eventKey="/sign-in">Sign In</Nav.Link>
+        <Nav.Link as={Link} to="/login" eventKey="/login">
+          Sign In
+        </Nav.Link>
       </Nav.Item>
 
       <Nav.Item className={`ml-2 ${styles.signUpNavItem}`}>
-        <button className="btn btn btn-outline-light">Sign Up</button>
+        <Nav.Link
+          as={Link}
+          to="/register"
+          eventKey="/register"
+          className={`btn btn btn-outline-light ${styles.signUpNavButton}`}
+        >
+          Sign Up
+        </Nav.Link>
       </Nav.Item>
     </>
   )
