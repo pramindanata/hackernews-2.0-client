@@ -1,10 +1,12 @@
 import React from 'react'
 
-export default (props: any) => {
+const Default = (props: any): JSX.Element => {
   return (
     <div>
       <div>This is a header</div>
-      { props.children }
+      {props.children}
     </div>
   )
 }
+
+export default Default
