@@ -10,6 +10,7 @@ const Home = (): JSX.Element => {
       </Helmet>
 
       <Layout>
+        <h2>Test Header</h2>
         <p>Hello World</p>
         <button className="btn btn-primary">test 1234</button>
       </Layout>

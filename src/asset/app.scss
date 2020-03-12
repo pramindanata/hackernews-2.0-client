@@ -2,6 +2,8 @@
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
 
+@import url('https://fonts.googleapis.com/css?family=Merriweather|Merriweather+Sans&display=swap');
+
 $theme-colors: (
   "primary": #ff6600,
   "secondary": #003399,
@@ -12,6 +14,12 @@ $theme-colors: (
   "light": $light,
   "dark": $dark
 );
+
+$font-family-base: 'Merriweather', serif;
+$font-family-header: 'Merriweather Sans', sans-serif;
+
+$headings-font-family: $font-family-header;
+$headings-font-weight: 800;
 
 $btn-border-radius: 0;
 $btn-border-radius-lg: 0;
