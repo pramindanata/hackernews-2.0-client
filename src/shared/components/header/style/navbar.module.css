@@ -1,0 +1,17 @@
+.navbarWrapper {
+  justify-content: space-between!important;
+}
+
+.searchWrapper {
+  min-width: 300px;
+}
+
+.navWrapper {
+  justify-content: flex-end;
+  min-width: 300px;
+}
+
+.signUpNavItem {
+  display: flex;
+  align-items: center;
+}

@@ -1,11 +1,16 @@
 import React from 'react'
+import { Container } from 'react-bootstrap'
+import Header from '@/shared/components/header'
 
 const Default = (props: any): JSX.Element => {
   return (
-    <div>
-      <div>This is a header</div>
-      {props.children}
-    </div>
+    <>
+      <Header />
+      <Container>
+        <div>This is a header</div>
+        {props.children}
+      </Container>
+    </>
   )
 }
 
