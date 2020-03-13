@@ -32,7 +32,7 @@ const NavItems = (): JSX.Element => {
       {!user ? (
         <>
           <Nav.Item>
-            <Nav.Link href="/login" eventKey="/login">
+            <Nav.Link as={Link} to="/login" eventKey="/login">
               Sign In
             </Nav.Link>
           </Nav.Item>

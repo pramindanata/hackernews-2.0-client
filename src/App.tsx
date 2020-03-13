@@ -5,6 +5,9 @@ import LayoutSelector from '@/layout/Selector'
 import AuthRequest from '@/request/auth'
 import { setUser } from '@/store/action'
 
+// import PrivateRoute from '@/shared/components/PrivateRoute'
+import GuestRoute from '@/shared/components/GuestRoute'
+
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Submit from '@/pages/Submit'
@@ -15,10 +18,12 @@ const App = (): JSX.Element => {
   const loc = useLocation()
   const [ready, setReady] = useState(false)
   const dispatch = useDispatch()
+  const isTargetingGuest =
+    loc.pathname === '/login' || loc.pathname === '/register'
   let layout: 'Default' | 'Auth' = 'Default'
 
   // Only changed per reload
-  if (loc.pathname === '/login' || loc.pathname === '/register') {
+  if (isTargetingGuest) {
     layout = 'Auth'
   }
   const token = localStorage.getItem('token')
@@ -29,6 +34,10 @@ const App = (): JSX.Element => {
 
       dispatch(setUser(me))
       setReady(true)
+
+      if (isTargetingGuest) {
+        window.location.href = '/'
+      }
     }
 
     if (token) {
@@ -53,13 +62,13 @@ const App = (): JSX.Element => {
           <Submit />
         </Route>
 
-        <Route exact path="/login">
+        <GuestRoute exact path="/login">
           <Login />
-        </Route>
+        </GuestRoute>
 
-        <Route exact path="/register">
+        <GuestRoute exact path="/register">
           <Register />
-        </Route>
+        </GuestRoute>
 
         <Route path="*">
           <NoMatch />

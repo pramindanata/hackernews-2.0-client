@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import styles from '@/layout/Auth/index.module.css'
 
@@ -9,9 +10,9 @@ const Auth = (props: any): JSX.Element => {
     <Container className={styles.container}>
       <div className={`py-5 ${styles.wrapper}`}>
         <div className="mb-5 text-center">
-          <a href="/" className={styles.header}>
+          <Link to="/" className={styles.header}>
             <h4>Hacker News 2.0</h4>
-          </a>
+          </Link>
         </div>
 
         {props.children}
