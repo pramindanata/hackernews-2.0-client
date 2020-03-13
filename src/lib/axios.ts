@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from '@/config'
+import { loadProgressBar } from 'axios-progress-bar'
 
 axios.defaults.baseURL = config.app.apiServer
 
@@ -12,5 +13,7 @@ axios.interceptors.request.use(config => {
 
   return config
 })
+
+loadProgressBar(null, axios)
 
 export default axios
