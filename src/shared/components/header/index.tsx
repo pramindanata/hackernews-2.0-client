@@ -3,8 +3,8 @@ import { Navbar, Container } from 'react-bootstrap'
 import useWindowDimensions from '@/shared/hook/useWindowDimensions'
 import config from '@/config'
 import styles from './style/navbar.module.css'
-import MobileNav from './mobileNav'
-import DesktopNav from './desktopNav'
+import MobileNav from './MobileNav'
+import DesktopNav from './DesktopNav'
 
 const Header = (): JSX.Element => {
   const { width } = useWindowDimensions()

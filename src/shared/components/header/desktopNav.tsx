@@ -1,6 +1,6 @@
 import React from 'react'
 import { Nav, Navbar, Form, FormControl } from 'react-bootstrap'
-import NavItems from './navItems'
+import NavItems from './NavItems'
 import styles from './style/navbar.module.css'
 
 const MobileNav = (): JSX.Element => {

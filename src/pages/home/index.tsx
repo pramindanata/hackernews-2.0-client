@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import Layout from '@/layout/default'
+import Layout from '@/layout/Default'
 
 const Home = (): JSX.Element => {
   return (
