@@ -9,7 +9,7 @@ import Pagination from '@/shared/components/Pagination'
 const Home = (): JSX.Element => {
   const initialSort = 'published'
   const initialOrder = 'desc'
-  const limit = 3
+  const limit = 10
 
   const [fetchReady, setFetchReady] = useState(false)
   const [ready, setReady] = useState(false)

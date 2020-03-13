@@ -23,14 +23,14 @@ const NavItems = (): JSX.Element => {
         </Nav.Link>
       </Nav.Item>
 
-      <Nav.Item>
-        <Nav.Link as={Link} to="/submit" eventKey="/submit">
-          Submit
-        </Nav.Link>
-      </Nav.Item>
-
       {!user ? (
         <>
+          <Nav.Item>
+            <Nav.Link as={Link} to="/login" eventKey="/login">
+              Submit
+            </Nav.Link>
+          </Nav.Item>
+
           <Nav.Item>
             <Nav.Link as={Link} to="/login" eventKey="/login">
               Sign In
@@ -50,6 +50,12 @@ const NavItems = (): JSX.Element => {
         </>
       ) : (
         <>
+          <Nav.Item>
+            <Nav.Link as={Link} to="/submit" eventKey="/submit">
+              Submit
+            </Nav.Link>
+          </Nav.Item>
+
           <Nav.Item>
             <Nav.Link as={Link} to="/profile" eventKey="/profile">
               Profile
