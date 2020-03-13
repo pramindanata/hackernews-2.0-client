@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import * as RI from '@/interface'
-import Layout from '@/layout/Default'
 import NewsRequest from '@/request/news'
 
 const Home = (): JSX.Element => {
@@ -27,7 +26,7 @@ const Home = (): JSX.Element => {
         <title>Hacker News 2.0</title>
       </Helmet>
 
-      <Layout>{ready && <div>News is ready. {total} news given.</div>}</Layout>
+      {ready && <div>News is ready. {total} news given.</div>}
     </>
   )
 }

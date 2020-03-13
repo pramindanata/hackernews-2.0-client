@@ -1,6 +1,5 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import Layout from '@/layout/Default'
 
 const Login = (): JSX.Element => {
   return (
@@ -8,11 +7,9 @@ const Login = (): JSX.Element => {
       <Helmet>
         <title>Sign In</title>
       </Helmet>
-      <Layout>
-        <div>
-          <p>Ini halaman login</p>
-        </div>
-      </Layout>
+      <div>
+        <p>Ini halaman login</p>
+      </div>
     </>
   )
 }
