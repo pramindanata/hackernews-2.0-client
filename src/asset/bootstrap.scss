@@ -38,6 +38,10 @@ $navbar-dark-hover-color: rgba($white, .95);
 // Prefix `c` stand for `custom`
 $c-lg-breakpoint: map-get($grid-breakpoints, "lg");
 
+.text-sm {
+  font-size: $font-size-sm;
+}
+
 @media (max-width: $c-lg-breakpoint - 1) {
   .app-navbar .navbar-nav {
     flex-direction: row;

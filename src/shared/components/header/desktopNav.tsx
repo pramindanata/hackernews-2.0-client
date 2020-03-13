@@ -16,7 +16,7 @@ const MobileNav = (): JSX.Element => {
       </Form>
 
       <Navbar.Brand as={Link} to="/" className="desktop-nav-item">
-        <h5 className="m-0">Hacker Rank 2.0</h5>
+        <h5 className="m-0">Hacker News 2.0</h5>
       </Navbar.Brand>
 
       <Nav
