@@ -49,4 +49,6 @@ export namespace Redux {
 export interface NewsFilter {
   sort: 'published' | 'vote'
   order: 'desc' | 'asc'
+  limit: number
+  offset: number
 }
