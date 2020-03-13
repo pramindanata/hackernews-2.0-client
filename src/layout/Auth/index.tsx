@@ -8,7 +8,7 @@ const Auth = (props: any): JSX.Element => {
   return (
     <Container className={styles.container}>
       <div className={`py-5 ${styles.wrapper}`}>
-        <div className="mb-4">
+        <div className="mb-5 text-center">
           <a href="/" className={styles.header}>
             <h4>Hacker News 2.0</h4>
           </a>
@@ -16,7 +16,7 @@ const Auth = (props: any): JSX.Element => {
 
         {props.children}
 
-        <div className="mt-4">
+        <div className="mt-5 text-center">
           <div>
             <span className={styles.copyright}>&copy;</span> {year} cool_snek
           </div>

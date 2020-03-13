@@ -7,8 +7,6 @@ class NewsRequest {
       axios
         .get('/news')
         .then(res => {
-          console.log(res.data)
-
           resolve(res.data)
         })
         .catch(err => reject(err))
