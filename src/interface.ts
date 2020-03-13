@@ -22,3 +22,11 @@ export interface NewsFeed {
   total: number
   data: Entity.News[]
 }
+
+export namespace Redux {
+  export namespace Store {
+    export interface Layout {
+      template: 'Default' | 'Auth'
+    }
+  }
+}
