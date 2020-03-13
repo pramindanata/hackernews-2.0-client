@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Form } from 'react-bootstrap'
-
-type Sort = 'published' | 'vote'
-type Order = 'desc' | 'asc'
+import * as I from '@/interface'
 
 interface Props {
-  initialSort: Sort
-  initialOrder: Order
-  onChange: (sort: Sort, order: Order) => void
+  initialSort: I.NewsFilter['sort']
+  initialOrder: I.NewsFilter['order']
+  onChange: (sort: I.NewsFilter['sort'], order: I.NewsFilter['order']) => void
 }
 
 const Filter = (props: Props): JSX.Element => {
   const { onChange, initialOrder, initialSort } = props
 
-  const [sort, setSort] = useState<Sort>(initialSort)
-  const [order, setOrder] = useState<Order>(initialOrder)
+  const [sort, setSort] = useState<I.NewsFilter['sort']>(initialSort)
+  const [order, setOrder] = useState<I.NewsFilter['order']>(initialOrder)
 
   useEffect(() => {
     onChange(sort, order)

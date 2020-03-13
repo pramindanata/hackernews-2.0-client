@@ -5,27 +5,30 @@ import NewsRequest from '@/request/news'
 import NewsItem from '@/shared/components/NewsItem'
 import Filter from '@/shared/components/Filter'
 
-type Sort = 'published' | 'vote'
-type Order = 'desc' | 'asc'
-
 const Home = (): JSX.Element => {
   const initialSort = 'published'
   const initialOrder = 'desc'
 
   const [ready, setReady] = useState(false)
   const [total, setTotal] = useState(0)
-  const [sort, setSort] = useState<Sort>(initialSort)
-  const [order, setOrder] = useState<Order>(initialOrder)
+  const [sort, setSort] = useState<RI.NewsFilter['sort']>(initialSort)
+  const [order, setOrder] = useState<RI.NewsFilter['order']>(initialOrder)
   const [news, setNews] = useState<RI.Entity.News[]>([])
 
-  const handleFilter = (sort: Sort, order: Order): void => {
+  const handleFilter = (
+    sort: RI.NewsFilter['sort'],
+    order: RI.NewsFilter['order'],
+  ): void => {
     setSort(sort)
     setOrder(order)
   }
 
   useEffect(() => {
     async function fetch(): Promise<void> {
-      const result = await NewsRequest.index()
+      const result = await NewsRequest.index({
+        order,
+        sort,
+      })
 
       setReady(true)
       setTotal(result.total)

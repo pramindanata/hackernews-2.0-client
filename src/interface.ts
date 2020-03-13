@@ -45,3 +45,8 @@ export namespace Redux {
     auth: Store.Auth
   }
 }
+
+export interface NewsFilter {
+  sort: 'published' | 'vote'
+  order: 'desc' | 'asc'
+}
