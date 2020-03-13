@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Row, Col, Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { Card, Row, Col, Form, Button, Alert } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
 import InvalidFeedback from '@/shared/components/InvalidFeedback'
 import AuthRequest from '@/request/auth'
 
-const Login = (): JSX.Element => {
+const Register = (): JSX.Element => {
   const [baseErrorMessage, setBaseErrorMessage] = useState('')
   const [submited, setSubmited] = useState(false)
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
   const [usernameErr, setUsernameErr] = useState<string | undefined>(undefined)
   const [passwordErr, setPasswordErr] = useState<string | undefined>(undefined)
+  const [emailErr, setEmailErr] = useState<string | undefined>(undefined)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
@@ -26,13 +28,14 @@ const Login = (): JSX.Element => {
   }
 
   useEffect(() => {
-    async function login(): Promise<void> {
+    async function register(): Promise<void> {
       resetError()
 
       try {
-        const res = await AuthRequest.login({
+        const res = await AuthRequest.register({
           username,
           password,
+          email,
         })
 
         // Set token and redirect
@@ -46,6 +49,7 @@ const Login = (): JSX.Element => {
         } else {
           const { body } = response.data.data
           setUsernameErr(body.username)
+          setEmailErr(body.email)
           setPasswordErr(body.password)
         }
 
@@ -54,14 +58,14 @@ const Login = (): JSX.Element => {
     }
 
     if (submited) {
-      login()
+      register()
     }
-  }, [submited, username, password])
+  }, [submited, username, password, email])
 
   return (
     <>
       <Helmet>
-        <title>Sign In</title>
+        <title>Sign Up</title>
       </Helmet>
       <div>
         <Row>
@@ -73,7 +77,7 @@ const Login = (): JSX.Element => {
           <Col sm={8} md={6} lg={4}>
             <Card>
               <Card.Body>
-                <Card.Title className="mb-4 text-center">Sign In</Card.Title>
+                <Card.Title className="mb-4 text-center">Sign Up</Card.Title>
 
                 <Alert show={baseErrorMessage !== ''} variant="danger">
                   {baseErrorMessage}
@@ -89,6 +93,17 @@ const Login = (): JSX.Element => {
                       onChange={(e: any): void => setUsername(e.target.value)}
                     />
                     <InvalidFeedback message={usernameErr} />
+                  </Form.Group>
+
+                  <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e: any): void => setEmail(e.target.value)}
+                    />
+                    <InvalidFeedback message={emailErr} />
                   </Form.Group>
 
                   <Form.Group controlId="password">
@@ -112,13 +127,11 @@ const Login = (): JSX.Element => {
                   </Button>
 
                   <div className="text-center my-3">
-                    <span className="text-sm">
-                      Don&apos;t have an account ?
-                    </span>
+                    <span className="text-sm">Already have an account ?</span>
                   </div>
 
-                  <Button as={Link} to="/register" block>
-                    Join Now
+                  <Button as={Link} to="/login" block variant="secondary">
+                    Sign In
                   </Button>
                 </Form>
               </Card.Body>
@@ -130,4 +143,4 @@ const Login = (): JSX.Element => {
   )
 }
 
-export default Login
+export default Register
