@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Switch, Route, useLocation } from 'react-router-dom'
+import LayoutSelector from '@/layout/Selector'
+import AuthRequest from '@/request/auth'
+import { setUser } from '@/store/action'
+
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Submit from '@/pages/Submit'
 import Register from '@/pages/Register'
-import LayoutSelector from '@/layout/Selector'
-import AuthRequest from '@/request/auth'
-import { setUser } from '@/store/action'
+import NoMatch from '@/pages/NoMatch'
 
 const App = (): JSX.Element => {
   const loc = useLocation()
@@ -57,6 +59,10 @@ const App = (): JSX.Element => {
 
         <Route exact path="/register">
           <Register />
+        </Route>
+
+        <Route path="*">
+          <NoMatch />
         </Route>
       </Switch>
     </LayoutSelector>
