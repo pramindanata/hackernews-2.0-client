@@ -38,4 +38,9 @@ export namespace Redux {
       user: Entity.User | null
     }
   }
+
+  export interface State {
+    layout: Store.Layout
+    auth: Store.Auth
+  }
 }

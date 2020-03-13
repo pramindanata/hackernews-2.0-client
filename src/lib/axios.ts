@@ -8,11 +8,30 @@ axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
 
   if (token) {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    config.headers.Authorization = `Bearer ${token}`
   }
 
   return config
 })
+
+axios.interceptors.request.use(
+  res => {
+    return res
+  },
+  err => {
+    const { response } = err
+
+    if (
+      response.status === 403 &&
+      response.data.message === 'Invalid token given'
+    ) {
+      localStorage.removeItem('token')
+      window.location.href = '/login'
+    }
+
+    return Promise.reject(err)
+  },
+)
 
 loadProgressBar(null, axios)
 

@@ -20,6 +20,17 @@ class AuthRequest {
         .catch(err => reject(err))
     })
   }
+
+  public static me(): Promise<I.Entity.User> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get('/auth/me')
+        .then(res => {
+          resolve(res.data.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
 }
 
 export default AuthRequest

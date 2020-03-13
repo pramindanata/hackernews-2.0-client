@@ -55,7 +55,7 @@ const Login = (): JSX.Element => {
     if (submited) {
       login()
     }
-  }, [submited])
+  }, [submited, username, password])
 
   return (
     <>
