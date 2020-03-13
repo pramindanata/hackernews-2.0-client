@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import * as RI from '@/interface'
 import NewsRequest from '@/request/news'
+import NewsItem from '@/shared/components/NewsItem'
 
 const Home = (): JSX.Element => {
   const [ready, setReady] = useState(false)
@@ -26,7 +27,7 @@ const Home = (): JSX.Element => {
         <title>Hacker News 2.0</title>
       </Helmet>
 
-      {ready && <div>News is ready. {total} news given.</div>}
+      {ready && news.map(item => <NewsItem key={item.id} value={item} />)}
     </>
   )
 }

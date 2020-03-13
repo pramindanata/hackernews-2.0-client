@@ -7,6 +7,7 @@ export namespace Entity {
     createdAt: string
     user?: User
     voteCount?: number
+    upvoted?: boolean
   }
 
   export interface User {

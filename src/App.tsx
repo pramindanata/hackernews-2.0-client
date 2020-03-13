@@ -45,7 +45,7 @@ const App = (): JSX.Element => {
     }
 
     setReady(true)
-  }, [token])
+  }, [token, isTargetingGuest, dispatch])
 
   if (!ready) {
     return <div>Loading...</div>
