@@ -1,28 +1,35 @@
 import React from 'react'
-import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import store from '@/store'
+import { Switch, Route, useLocation } from 'react-router-dom'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
-import Layout from '@/layout/Default'
+import Submit from '@/pages/Submit'
+import LayoutSelector from '@/layout/Selector'
 
 const App = (): JSX.Element => {
-  return (
-    <Provider store={store}>
-      <Router>
-        <Layout>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
+  const loc = useLocation()
+  let layout: 'Default' | 'Auth' = 'Default'
 
-            <Route exact path="/login">
-              <Login />
-            </Route>
-          </Switch>
-        </Layout>
-      </Router>
-    </Provider>
+  // Only changed per reload
+  if (loc.pathname === '/login' || loc.pathname === '/register') {
+    layout = 'Auth'
+  }
+
+  return (
+    <LayoutSelector tag={layout}>
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+
+        <Route exact path="/submit">
+          <Submit />
+        </Route>
+
+        <Route exact path="/login">
+          <Login />
+        </Route>
+      </Switch>
+    </LayoutSelector>
   )
 }
 

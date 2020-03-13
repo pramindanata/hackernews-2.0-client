@@ -1,9 +1,12 @@
 import React from 'react'
 
-const Auth = (): JSX.Element => {
+const Auth = (props: any): JSX.Element => {
   return (
     <div>
-      <h2>Auth Theme</h2>
+      <a href="/">
+        <h4>Hacker News 2.0</h4>
+      </a>
+      <div>{props.children}</div>
     </div>
   )
 }

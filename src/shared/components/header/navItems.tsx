@@ -13,11 +13,13 @@ const NavItems = (): JSX.Element => {
       </Nav.Item>
 
       <Nav.Item>
-        <Nav.Link eventKey="/submit">Submit</Nav.Link>
+        <Nav.Link as={Link} to="/submit" eventKey="/submit">
+          Submit
+        </Nav.Link>
       </Nav.Item>
 
       <Nav.Item>
-        <Nav.Link as={Link} to="/login" eventKey="/login">
+        <Nav.Link href="/login" eventKey="/login">
           Sign In
         </Nav.Link>
       </Nav.Item>
