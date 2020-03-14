@@ -7,12 +7,13 @@ import LayoutSelector from '@/layout/Selector'
 import AuthRequest from '@/request/auth'
 import { setUser } from '@/store/action'
 
-// import PrivateRoute from '@/shared/components/PrivateRoute'
+import PrivateRoute from '@/shared/components/PrivateRoute'
 import GuestRoute from '@/shared/components/GuestRoute'
+import Loading from '@/shared/components/Loading'
 
 const Home = loadable(() => import('@/pages/Home'))
 const Login = loadable(() => import('@/pages/Login'))
-const Submit = loadable(() => import('@/pages/Submit'))
+const Profile = loadable(() => import('@/pages/Profile'))
 const Register = loadable(() => import('@/pages/Register'))
 const NoMatch = loadable(() => import('@/pages/NoMatch'))
 
@@ -44,13 +45,13 @@ const App = (): JSX.Element => {
 
     if (token) {
       getMe()
+    } else {
+      setReady(true)
     }
-
-    setReady(true)
   }, [token, isTargetingGuest, dispatch])
 
   if (!ready) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   return (
@@ -60,9 +61,9 @@ const App = (): JSX.Element => {
           <Home />
         </Route>
 
-        <Route exact path="/submit">
-          <Submit />
-        </Route>
+        <PrivateRoute exact path="/profile">
+          <Profile />
+        </PrivateRoute>
 
         <GuestRoute exact path="/login">
           <Login />

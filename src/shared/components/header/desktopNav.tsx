@@ -1,11 +1,13 @@
 import React from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import NavItems from './NavItems'
 import Search from './Search'
 import styles from './style/navbar.module.css'
 
 const MobileNav = (): JSX.Element => {
+  const location = useLocation()
+
   return (
     <>
       <Search
@@ -19,7 +21,7 @@ const MobileNav = (): JSX.Element => {
 
       <Nav
         className={`desktop-nav-item ${styles.navWrapper}`}
-        activeKey="/news"
+        activeKey={location.pathname}
       >
         <NavItems />
       </Nav>

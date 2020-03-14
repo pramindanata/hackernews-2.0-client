@@ -24,7 +24,7 @@ const Header = (): JSX.Element => {
     <div className="bg-primary">
       <Container>
         <Navbar
-          collapseOnSelect
+          // collapseOnSelect
           bg="primary"
           variant="dark"
           expand="lg"

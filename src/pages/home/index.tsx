@@ -134,6 +134,12 @@ const Home = (): JSX.Element => {
 
       <Filter onChange={handleFilter} initialOrder={order} initialSort={sort} />
 
+      {!fetchReady && ready && news.length === 0 ? (
+        <div>No data found</div>
+      ) : (
+        ''
+      )}
+
       {ready &&
         news.map((item, index) => (
           <NewsItem

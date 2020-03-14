@@ -14,6 +14,7 @@ export namespace Entity {
     id: number
     username: string
     createdAt: string
+    photo: string
     email?: string
     news?: News[]
     newsCount?: number

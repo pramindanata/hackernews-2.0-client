@@ -1,10 +1,12 @@
 import React from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import NavItems from './NavItems'
 import Search from './Search'
 
 const MobileNav = (): JSX.Element => {
+  const location = useLocation()
+
   return (
     <>
       <Navbar.Brand as={Link} to="/" className="mobile-nav-item">
@@ -12,7 +14,7 @@ const MobileNav = (): JSX.Element => {
       </Navbar.Brand>
       <Navbar.Toggle className="mobile-nav-item" aria-controls="navbar" />
       <Navbar.Collapse className="mobile-nav-item" id="navbar">
-        <Nav activeKey="/news" className="mb-2">
+        <Nav activeKey={location.pathname} className="mb-2">
           <NavItems />
         </Nav>
 
