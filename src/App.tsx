@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Switch, Route, useLocation } from 'react-router-dom'
+import loadable from '@loadable/component'
+
 import LayoutSelector from '@/layout/Selector'
 import AuthRequest from '@/request/auth'
 import { setUser } from '@/store/action'
@@ -8,11 +10,11 @@ import { setUser } from '@/store/action'
 // import PrivateRoute from '@/shared/components/PrivateRoute'
 import GuestRoute from '@/shared/components/GuestRoute'
 
-import Home from '@/pages/Home'
-import Login from '@/pages/Login'
-import Submit from '@/pages/Submit'
-import Register from '@/pages/Register'
-import NoMatch from '@/pages/NoMatch'
+const Home = loadable(() => import('@/pages/Home'))
+const Login = loadable(() => import('@/pages/Login'))
+const Submit = loadable(() => import('@/pages/Submit'))
+const Register = loadable(() => import('@/pages/Register'))
+const NoMatch = loadable(() => import('@/pages/NoMatch'))
 
 const App = (): JSX.Element => {
   const loc = useLocation()
