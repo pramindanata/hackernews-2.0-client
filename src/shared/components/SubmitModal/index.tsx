@@ -16,9 +16,6 @@ const SubmitModal = (): JSX.Element => {
     state => state.auth.user as I.Entity.User,
   )
   const show = useSelector<I.Redux.State, boolean>(state => state.modal.submit)
-  const handleHide = useCallback(() => dispatch(setSubmitModalShow(false)), [
-    dispatch,
-  ])
 
   const form = useRef<any>(null)
   const [submited, setSubmited] = useState<boolean>(false)
@@ -39,6 +36,13 @@ const SubmitModal = (): JSX.Element => {
     setUrlErr('')
   }, [])
 
+  const handleHide = useCallback(() => {
+    resetError()
+    setTitle('')
+    setUrl('')
+    dispatch(setSubmitModalShow(false))
+  }, [dispatch, resetError])
+
   const updateUser = useCallback(() => {
     const newUser = produce(user, draft => {
       const newsCount = draft.newsCount as number
@@ -57,9 +61,9 @@ const SubmitModal = (): JSX.Element => {
   }, [title, url])
 
   useEffect(() => {
-    resetError()
-
     if (submited) {
+      resetError()
+
       store()
         .then(() => {
           setTitle('')
