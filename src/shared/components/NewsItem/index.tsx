@@ -1,12 +1,21 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import * as I from '@/interface'
 import styles from '@/shared/components/NewsItem/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
+import NewsRequest from '@/request/news'
 
-const NewsItem = (props: { value: I.Entity.News }): JSX.Element => {
-  const { value } = props
+interface Props {
+  value: I.Entity.News
+  index: number
+  onVote: (index: number, id: number, upvote: boolean) => any
+}
+
+const NewsItem = (props: Props): JSX.Element => {
+  const history = useHistory()
+  const { value, index, onVote } = props
   const user = useSelector<I.Redux.State, I.Entity.User | null>(
     state => state.auth.user,
   )
@@ -21,10 +30,41 @@ const NewsItem = (props: { value: I.Entity.News }): JSX.Element => {
   }, [user, value])
   const createdAt = timeDifferenceForDate(value.createdAt)
 
+  const [voting, setVoting] = useState<boolean>(false)
+
+  const vote = useCallback(async () => {
+    const req = value.upvoted ? NewsRequest.unvote : NewsRequest.vote
+
+    await req(value.id)
+  }, [value])
+
+  const handleClick = useCallback(() => {
+    if (!user) {
+      history.push('/login')
+    }
+
+    setVoting(true)
+
+    vote()
+      .then(() => {
+        onVote(index, value.id, !value.upvoted)
+      })
+      .finally(() => {
+        setVoting(false)
+      })
+  }, [vote, index, value, onVote])
+
   return (
     <div className={`p-2 border-bottom ${styles['news-item']}`}>
       <div className="mr-3">
-        <Button variant="outline-primary" active={value.upvoted} size="sm">
+        <Button
+          variant={value.upvoted ? 'primary' : 'light'}
+          active={!voting && value.upvoted}
+          size="sm"
+          className="rounded-circle"
+          disabled={voting}
+          onClick={handleClick}
+        >
           <i className="i-arrow-up" />
         </Button>
       </div>

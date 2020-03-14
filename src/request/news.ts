@@ -34,6 +34,28 @@ class NewsRequest {
         .catch(err => reject(err))
     })
   }
+
+  public static vote(id: number): Promise<{ id: number; createdAt: string }> {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`/news/${id}/vote`)
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
+
+  public static unvote(id: number): Promise<{ id: number; createdAt: string }> {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`/news/${id}/vote`)
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
 }
 
 export default NewsRequest

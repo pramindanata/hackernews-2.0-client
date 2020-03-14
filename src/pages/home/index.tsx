@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import queryString from 'query-string'
+import produce from 'immer'
 
 import * as I from '@/interface'
 import NewsRequest from '@/request/news'
@@ -15,7 +16,7 @@ import { setNewsRefetch } from '@/store/action'
 const Home = (): JSX.Element => {
   const initialSort = 'published'
   const initialOrder = 'desc'
-  const limit = 10
+  const limit = 15
 
   const params = useLocation()
   const dispatch = useDispatch()
@@ -69,6 +70,25 @@ const Home = (): JSX.Element => {
     return result
   }, [order, sort, limit, page, query])
 
+  const updateNews = useCallback(
+    (index: number, id: number, upvote: boolean): void => {
+      let doChange = false
+
+      const nextNews = produce(news, draft => {
+        if (draft[index].id === id) {
+          const total = draft[index].voteCount as number
+
+          doChange = true
+          draft[index].upvoted = upvote
+          draft[index].voteCount = total + (upvote ? 1 : -1)
+        }
+      })
+
+      if (doChange) setNews(nextNews)
+    },
+    [news],
+  )
+
   useEffect(() => {
     setSort(initialSort)
     setOrder(initialOrder)
@@ -88,12 +108,15 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     if (fetchReady) {
-      getNews().then(res => {
-        setReady(true)
-        setTotal(res.total)
-        setNews(res.data)
-        setFetchReady(false)
-      })
+      getNews()
+        .then(res => {
+          setReady(true)
+          setTotal(res.total)
+          setNews(res.data)
+        })
+        .finally(() => {
+          setFetchReady(false)
+        })
     }
   }, [fetchReady, getNews])
 
@@ -111,7 +134,15 @@ const Home = (): JSX.Element => {
 
       <Filter onChange={handleFilter} initialOrder={order} initialSort={sort} />
 
-      {ready && news.map(item => <NewsItem key={item.id} value={item} />)}
+      {ready &&
+        news.map((item, index) => (
+          <NewsItem
+            key={item.id}
+            index={index}
+            value={item}
+            onVote={updateNews}
+          />
+        ))}
 
       <div className="mt-4">
         <Pagination
