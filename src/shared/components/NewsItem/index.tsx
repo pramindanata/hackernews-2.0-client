@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import * as I from '@/interface'
@@ -7,6 +7,7 @@ import styles from '@/shared/components/NewsItem/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
 import NewsRequest from '@/request/news'
 import notifier from '@/lib/awn'
+import { setEditNewsModalShow } from '@/store/action'
 
 interface Props {
   value: I.Entity.News
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const NewsItem = (props: Props): JSX.Element => {
+  const dispatch = useDispatch()
   const history = useHistory()
   const {
     value,
@@ -26,7 +28,7 @@ const NewsItem = (props: Props): JSX.Element => {
     onVote,
     showOwner,
     onRemove,
-    onUpdate,
+    // onUpdate,
     showAction,
   } = props
   const user = useSelector<I.Redux.State, I.Entity.User | null>(
@@ -67,24 +69,34 @@ const NewsItem = (props: Props): JSX.Element => {
       })
   }, [vote, index, value, onVote, history, user])
 
-  const handleRemove = useCallback(
-    (index: number, value: I.Entity.News) => {
-      notifier.confirm('Are you sure want to remove this data ?', () => {
-        NewsRequest.delete(value.id)
-          .then(() => {
-            notifier.success('Data removed')
+  const handleRemove = useCallback(() => {
+    notifier.confirm('Are you sure want to remove this data ?', () => {
+      NewsRequest.delete(value.id)
+        .then(() => {
+          notifier.success('Data removed')
 
-            if (onRemove) {
-              onRemove(index, value.id)
-            }
-          })
-          .catch(() => {
-            notifier.alert('Woops')
-          })
-      })
-    },
-    [onRemove],
-  )
+          if (onRemove) {
+            onRemove(index, value.id)
+          }
+        })
+        .catch(() => {
+          notifier.alert('Woops')
+        })
+    })
+  }, [onRemove, index, value])
+
+  const handleUpdate = useCallback(() => {
+    dispatch(
+      setEditNewsModalShow({
+        active: true,
+        data: {
+          id: value.id,
+          title: value.title,
+          url: value.url,
+        },
+      }),
+    )
+  }, [dispatch, value])
 
   return (
     <div className={`p-2 border-bottom ${styles['news-item']}`}>
@@ -142,15 +154,16 @@ const NewsItem = (props: Props): JSX.Element => {
       {/* Action */}
       {showAction && (
         <div>
-          <Button variant="dark" className="mr-2" size="sm">
+          <Button
+            variant="dark"
+            className="mr-2"
+            size="sm"
+            onClick={handleUpdate}
+          >
             <i className="i-pencil" />
           </Button>
 
-          <Button
-            variant="danger"
-            size="sm"
-            onClick={() => handleRemove(index, value)}
-          >
+          <Button variant="danger" size="sm" onClick={handleRemove}>
             <i className="i-bin" />
           </Button>
         </div>

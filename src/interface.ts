@@ -48,6 +48,12 @@ export namespace Redux {
     export interface Modal {
       submit: boolean
       editProfile: boolean
+      editNews: boolean
+      editNewsPayload: {
+        id: null | number
+        title: string
+        url: string
+      }
     }
 
     export interface News {

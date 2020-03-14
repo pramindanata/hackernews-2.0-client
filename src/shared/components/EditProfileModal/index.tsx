@@ -76,6 +76,7 @@ const EditProfileModal = (): JSX.Element => {
 
       update()
         .then(() => {
+          setSubmited(false)
           setPassword('')
           setSuccessAlert(true)
 
@@ -85,14 +86,12 @@ const EditProfileModal = (): JSX.Element => {
           const { response } = err
 
           if (response.status === 422) {
+            setSubmited(false)
             const { body } = response.data.data
             setUsernameErr(body.username)
             setEmailErr(body.email)
             setPasswordErr(body.password)
           }
-        })
-        .finally(() => {
-          setSubmited(false)
         })
     }
   }, [submited, update, handleHide, resetError, dispatch, updateUser])

@@ -15,6 +15,14 @@ export const setSubmitModalShow = (value: boolean): any => ({
   payload: value,
 })
 
+export const setEditNewsModalShow = (value: {
+  active: boolean
+  data?: I.Redux.Store.Modal['editNewsPayload']
+}): any => ({
+  type: 'SET_EDIT_NEWS_MODAL_SHOW',
+  payload: value,
+})
+
 export const setEditProfileModalShow = (value: boolean): any => ({
   type: 'SET_EDIT_PROFILE_MODAL_SHOW',
   payload: value,
