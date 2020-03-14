@@ -38,17 +38,13 @@ const EditProfileModal = (): JSX.Element => {
     setEmailErr('')
     setPasswordErr('')
     setSuccessAlert(false)
-  }, [dispatch])
+  }, [dispatch, user])
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     setSubmited(true)
   }, [])
-
-  const handleClick = useCallback(() => {
-    form.current.dispatchEvent(new Event('submit'))
-  }, [form])
 
   const resetError = useCallback(() => {
     setUsernameErr('')
@@ -107,17 +103,17 @@ const EditProfileModal = (): JSX.Element => {
         <Modal.Title as="h5">Edit Profile</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
-        <Alert
-          show={successAlert}
-          variant="success"
-          dismissible
-          onClose={(): any => setSuccessAlert(false)}
-        >
-          Profile updated
-        </Alert>
+      <Form onSubmit={handleSubmit} ref={form}>
+        <Modal.Body>
+          <Alert
+            show={successAlert}
+            variant="success"
+            dismissible
+            onClose={(): any => setSuccessAlert(false)}
+          >
+            Profile updated
+          </Alert>
 
-        <Form onSubmit={handleSubmit} ref={form}>
           <Form.Group controlId="username">
             <Form.Label>Username</Form.Label>
             <Form.Control
@@ -144,23 +140,24 @@ const EditProfileModal = (): JSX.Element => {
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
-              required
               value={password}
               onChange={(e: any): void => setPassword(e.target.value)}
             />
             <InvalidFeedback message={passwordErr} />
           </Form.Group>
-        </Form>
-      </Modal.Body>
 
-      <Modal.Footer>
-        <Button variant="light" onClick={handleHide}>
-          Close
-        </Button>
-        <Button variant="secondary" onClick={handleClick}>
-          Submit
-        </Button>
-      </Modal.Footer>
+          <input type="submit" hidden />
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="light" onClick={handleHide}>
+            Close
+          </Button>
+          <Button variant="secondary" type="submit">
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   )
 }

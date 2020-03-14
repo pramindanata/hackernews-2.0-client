@@ -34,10 +34,6 @@ const SubmitModal = (): JSX.Element => {
     setSubmited(true)
   }, [])
 
-  const handleClick = useCallback(() => {
-    form.current.dispatchEvent(new Event('submit'))
-  }, [form])
-
   const resetError = useCallback(() => {
     setTitleErr('')
     setUrlErr('')
@@ -98,8 +94,8 @@ const SubmitModal = (): JSX.Element => {
         <Modal.Title as="h5">Submit</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
-        <Form onSubmit={handleSubmit} ref={form}>
+      <Form onSubmit={handleSubmit} ref={form}>
+        <Modal.Body>
           <Form.Group controlId="url">
             <Form.Label>URL</Form.Label>
             <Form.Control
@@ -122,17 +118,17 @@ const SubmitModal = (): JSX.Element => {
             />
             <InvalidFeedback message={titleErr} />
           </Form.Group>
-        </Form>
-      </Modal.Body>
+        </Modal.Body>
 
-      <Modal.Footer>
-        <Button variant="light" onClick={handleHide}>
-          Close
-        </Button>
-        <Button variant="secondary" onClick={handleClick}>
-          Submit
-        </Button>
-      </Modal.Footer>
+        <Modal.Footer>
+          <Button variant="light" onClick={handleHide}>
+            Close
+          </Button>
+          <Button variant="secondary" type="submit">
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   )
 }
