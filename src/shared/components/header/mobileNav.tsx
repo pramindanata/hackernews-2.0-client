@@ -1,7 +1,8 @@
 import React from 'react'
-import { Nav, Navbar, Form, FormControl } from 'react-bootstrap'
+import { Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import NavItems from './NavItems'
+import Search from './Search'
 
 const MobileNav = (): JSX.Element => {
   return (
@@ -15,9 +16,7 @@ const MobileNav = (): JSX.Element => {
           <NavItems />
         </Nav>
 
-        <Form inline>
-          <FormControl className="w-100" type="text" placeholder="Search..." />
-        </Form>
+        <Search />
       </Navbar.Collapse>
     </>
   )

@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Helmet } from 'react-helmet'
+import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import queryString from 'query-string'
+
 import * as I from '@/interface'
 import NewsRequest from '@/request/news'
 import NewsItem from '@/shared/components/NewsItem'
 import Filter from '@/shared/components/Filter'
+import SearchLabel from '@/shared/components/SearchLabel'
 import Pagination from '@/shared/components/Pagination'
 import { setNewsRefetch } from '@/store/action'
 
@@ -13,10 +17,18 @@ const Home = (): JSX.Element => {
   const initialOrder = 'desc'
   const limit = 10
 
+  const params = useLocation()
   const dispatch = useDispatch()
   const refetch = useSelector<I.Redux.State, boolean>(
     state => state.news.refetch,
   )
+
+  const [query, setQuery] = useState(queryString.parse(params.search))
+
+  useEffect(() => {
+    setQuery(queryString.parse(params.search))
+  }, [params])
+
   const [fetchReady, setFetchReady] = useState(false)
   const [ready, setReady] = useState(false)
   const [total, setTotal] = useState(0)
@@ -50,11 +62,19 @@ const Home = (): JSX.Element => {
       order,
       sort,
       limit,
+      search: query?.q as string,
       offset: page * limit,
     })
 
     return result
-  }, [order, sort, limit, page])
+  }, [order, sort, limit, page, query])
+
+  useEffect(() => {
+    setSort(initialSort)
+    setOrder(initialOrder)
+    setPage(0)
+    setFetchReady(true)
+  }, [query])
 
   useEffect(() => {
     if (refetch) {
@@ -86,6 +106,8 @@ const Home = (): JSX.Element => {
       <Helmet>
         <title>Hacker News 2.0</title>
       </Helmet>
+
+      {query.q && <SearchLabel value={query.q as string} />}
 
       <Filter onChange={handleFilter} initialOrder={order} initialSort={sort} />
 

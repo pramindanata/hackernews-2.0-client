@@ -11,6 +11,7 @@ class NewsRequest {
             order: filter.order,
             limit: filter.limit,
             offset: filter.offset,
+            search: filter.search,
           },
         })
         .then(res => {
