@@ -57,6 +57,31 @@ class NewsRequest {
     })
   }
 
+  public static update(id: number, data: I.NewsInput): Promise<I.NewsFeed> {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`/news/${id}`, {
+          title: data.title,
+          url: data.url,
+        })
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
+
+  public static delete(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`/news/${id}`)
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
+
   public static vote(id: number): Promise<{ id: number; createdAt: string }> {
     return new Promise((resolve, reject) => {
       axios

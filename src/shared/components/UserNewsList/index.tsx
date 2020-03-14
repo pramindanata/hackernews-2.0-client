@@ -9,14 +9,14 @@ import NewsRequest from '@/request/news'
 import NewsItem from '@/shared/components/NewsItem'
 import Filter from '@/shared/components/Filter'
 import Pagination from '@/shared/components/Pagination'
-import { setNewsRefetch } from '@/store/action'
+import { setNewsRefetch, setUser } from '@/store/action'
 
 interface Props {
-  userId: number
+  user: I.Entity.User
 }
 
 const UserNewsList = (props: Props): JSX.Element => {
-  const { userId } = props
+  const { user } = props
   const initialSort = 'published'
   const initialOrder = 'desc'
   const limit = 8
@@ -62,7 +62,7 @@ const UserNewsList = (props: Props): JSX.Element => {
   )
 
   const getNews = useCallback(async () => {
-    const result = await NewsRequest.ownByUser(userId, {
+    const result = await NewsRequest.ownByUser(user.id, {
       order,
       sort,
       limit,
@@ -71,7 +71,7 @@ const UserNewsList = (props: Props): JSX.Element => {
     })
 
     return result
-  }, [order, sort, limit, page, query, userId])
+  }, [order, sort, limit, page, query, user])
 
   const updateNews = useCallback(
     (index: number, id: number, upvote: boolean): void => {
@@ -91,6 +91,17 @@ const UserNewsList = (props: Props): JSX.Element => {
     },
     [news],
   )
+
+  const handleDelete = useCallback(() => {
+    const updatedUser = produce(user, draft => {
+      const total = draft.newsCount as number
+
+      draft.newsCount = total - 1
+    })
+
+    dispatch(setUser(updatedUser))
+    dispatch(setNewsRefetch(true))
+  }, [user, dispatch])
 
   useEffect(() => {
     setSort(initialSort)
@@ -138,6 +149,8 @@ const UserNewsList = (props: Props): JSX.Element => {
             index={index}
             value={item}
             showOwner={false}
+            showAction={true}
+            onRemove={handleDelete}
             onVote={updateNews}
           />
         ))}

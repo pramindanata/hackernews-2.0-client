@@ -7,5 +7,11 @@ declare module 'awesome-notifications' {
     alert(msg?: string, options?: any): Toast
     info(msg?: string, options?: any): Toast
     tip(msg?: string, options?: any): Toast
+    confirm(
+      message,
+      onOk?: () => any,
+      onCancel?: () => any,
+      options?: any,
+    ): Toast
   }
 }

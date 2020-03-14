@@ -6,17 +6,29 @@ import * as I from '@/interface'
 import styles from '@/shared/components/NewsItem/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
 import NewsRequest from '@/request/news'
+import notifier from '@/lib/awn'
 
 interface Props {
   value: I.Entity.News
   index: number
   showOwner: boolean
   onVote: (index: number, id: number, upvote: boolean) => any
+  showAction?: boolean
+  onRemove?: (index: number, id: number) => any
+  onUpdate?: (index: number, id: number) => any
 }
 
 const NewsItem = (props: Props): JSX.Element => {
   const history = useHistory()
-  const { value, index, onVote, showOwner } = props
+  const {
+    value,
+    index,
+    onVote,
+    showOwner,
+    onRemove,
+    onUpdate,
+    showAction,
+  } = props
   const user = useSelector<I.Redux.State, I.Entity.User | null>(
     state => state.auth.user,
   )
@@ -39,7 +51,7 @@ const NewsItem = (props: Props): JSX.Element => {
     await req(value.id)
   }, [value])
 
-  const handleClick = useCallback(() => {
+  const handleVote = useCallback(() => {
     if (!user) {
       history.push('/login')
     }
@@ -55,54 +67,94 @@ const NewsItem = (props: Props): JSX.Element => {
       })
   }, [vote, index, value, onVote, history, user])
 
+  const handleRemove = useCallback(
+    (index: number, value: I.Entity.News) => {
+      notifier.confirm('Are you sure want to remove this data ?', () => {
+        NewsRequest.delete(value.id)
+          .then(() => {
+            notifier.success('Data removed')
+
+            if (onRemove) {
+              onRemove(index, value.id)
+            }
+          })
+          .catch(() => {
+            notifier.alert('Woops')
+          })
+      })
+    },
+    [onRemove],
+  )
+
   return (
     <div className={`p-2 border-bottom ${styles['news-item']}`}>
-      <div className="mr-3">
-        <Button
-          variant={value.upvoted ? 'primary' : 'light'}
-          active={!voting && value.upvoted}
-          size="sm"
-          disabled={voting}
-          onClick={handleClick}
-        >
-          <i className="i-arrow-up" />
-        </Button>
-      </div>
-      <div>
-        <div className="font-weight-bold">
-          <a
-            href={value.url}
-            className="text-decoration-none text-dark"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Main */}
+      <div className="d-flex align-items-center">
+        <div className="mr-3">
+          <Button
+            variant={value.upvoted ? 'primary' : 'light'}
+            active={!voting && value.upvoted}
+            size="sm"
+            disabled={voting}
+            onClick={handleVote}
           >
-            <span className="mr-2">{value.title}</span>
-            <span className="text-muted">({value.domain})</span>
-          </a>
+            <i className="i-arrow-up" />
+          </Button>
         </div>
 
-        <div className="text-sm text-muted">
-          {value.voteCount || 0} pts
-          {showOwner ? (
-            <>
-              {' '}
-              by{' '}
-              <a
-                href="/"
-                className={`${
-                  isMine() ? 'text-primary' : 'text-muted'
-                } font-weight-bold`}
-              >
-                {value.user?.username}
-              </a>{' '}
-              on
-            </>
-          ) : (
-            <span className="mx-2">-</span>
-          )}
-          {createdAt}
+        <div>
+          <div className="font-weight-bold">
+            <a
+              href={value.url}
+              className="text-decoration-none text-dark"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="mr-2">{value.title}</span>
+              <span className="text-muted">({value.domain})</span>
+            </a>
+          </div>
+
+          <div className="text-sm text-muted">
+            {value.voteCount || 0} pts
+            {showOwner ? (
+              <>
+                {' '}
+                by{' '}
+                <a
+                  href="/"
+                  className={`${
+                    isMine() ? 'text-primary' : 'text-muted'
+                  } font-weight-bold`}
+                >
+                  {value.user?.username}
+                </a>{' '}
+                on
+              </>
+            ) : (
+              <span className="mx-2">-</span>
+            )}
+            {createdAt}
+          </div>
         </div>
       </div>
+
+      {/* Action */}
+      {showAction && (
+        <div>
+          <Button variant="dark" className="mr-2" size="sm">
+            <i className="i-pencil" />
+          </Button>
+
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => handleRemove(index, value)}
+          >
+            <i className="i-bin" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

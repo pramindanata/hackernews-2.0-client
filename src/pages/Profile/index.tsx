@@ -65,7 +65,7 @@ const Profile = (): JSX.Element => {
                 now !
               </p>
             ) : (
-              <NewsList userId={user.id} />
+              <NewsList user={user} />
             )}
           </div>
         </div>

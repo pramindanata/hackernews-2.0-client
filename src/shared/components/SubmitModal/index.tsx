@@ -54,8 +54,6 @@ const SubmitModal = (): JSX.Element => {
       title,
       url,
     })
-
-    setSubmited(false)
   }, [title, url])
 
   useEffect(() => {
@@ -68,7 +66,7 @@ const SubmitModal = (): JSX.Element => {
           setUrl('')
           handleHide()
 
-          if (location.pathname === '/') {
+          if (location.pathname === '/' || location.pathname === '/profile') {
             // reload news
             dispatch(setNewsRefetch(true))
           }
@@ -84,6 +82,9 @@ const SubmitModal = (): JSX.Element => {
             setTitleErr(body.title)
             setUrlErr(body.url)
           }
+        })
+        .finally(() => {
+          setSubmited(false)
         })
     }
   }, [submited, store, handleHide, resetError, dispatch, location, updateUser])

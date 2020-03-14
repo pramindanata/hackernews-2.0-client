@@ -185,11 +185,11 @@ $border-radius: 0;
 }
 
 #awn-popup-wrapper .awn-buttons .awn-btn-success {
-  background: map-get($map: $app-colors, $key: "success")
+  background: map-get($map: $app-colors, $key: "dark")
 }
 
 #awn-popup-wrapper .awn-buttons .awn-btn-success:hover {
-  background: #367218
+  background: #484e54
 }
 
 #awn-popup-wrapper .awn-buttons .awn-btn-cancel {
