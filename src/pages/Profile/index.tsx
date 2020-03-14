@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import styles from '@/pages/Profile/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
 import { setSubmitModalShow, setEditProfileModalShow } from '@/store/action'
+import NewsList from '@/shared/components/UserNewsList'
 
 import * as I from '@/interface'
 
@@ -52,16 +53,20 @@ const Profile = (): JSX.Element => {
           <hr />
 
           <div>
-            <p>
-              You don&apos;t have any post.{' '}
-              <span
-                className={`text-primary font-weight-bold ${styles['create-btn']}`}
-                onClick={(): void => dispatch(setSubmitModalShow(true))}
-              >
-                Submit one
-              </span>{' '}
-              now !
-            </p>
+            {(user.newsCount as number) === 0 ? (
+              <p>
+                You don&apos;t have any post.{' '}
+                <span
+                  className={`text-primary font-weight-bold ${styles['create-btn']}`}
+                  onClick={(): void => dispatch(setSubmitModalShow(true))}
+                >
+                  Submit one
+                </span>{' '}
+                now !
+              </p>
+            ) : (
+              <NewsList userId={user.id} />
+            )}
           </div>
         </div>
       </div>

@@ -10,12 +10,13 @@ import NewsRequest from '@/request/news'
 interface Props {
   value: I.Entity.News
   index: number
+  showOwner: boolean
   onVote: (index: number, id: number, upvote: boolean) => any
 }
 
 const NewsItem = (props: Props): JSX.Element => {
   const history = useHistory()
-  const { value, index, onVote } = props
+  const { value, index, onVote, showOwner } = props
   const user = useSelector<I.Redux.State, I.Entity.User | null>(
     state => state.auth.user,
   )
@@ -81,16 +82,25 @@ const NewsItem = (props: Props): JSX.Element => {
         </div>
 
         <div className="text-sm text-muted">
-          {value.voteCount || 0} pts by{' '}
-          <a
-            href="/"
-            className={`${
-              isMine() ? 'text-primary' : 'text-muted'
-            } font-weight-bold`}
-          >
-            {value.user?.username}
-          </a>{' '}
-          on {createdAt}
+          {value.voteCount || 0} pts
+          {showOwner ? (
+            <>
+              {' '}
+              by{' '}
+              <a
+                href="/"
+                className={`${
+                  isMine() ? 'text-primary' : 'text-muted'
+                } font-weight-bold`}
+              >
+                {value.user?.username}
+              </a>{' '}
+              on
+            </>
+          ) : (
+            <span className="mx-2">-</span>
+          )}
+          {createdAt}
         </div>
       </div>
     </div>

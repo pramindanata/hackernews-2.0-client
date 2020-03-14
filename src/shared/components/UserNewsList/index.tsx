@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Helmet } from 'react-helmet'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import queryString from 'query-string'
@@ -9,14 +8,18 @@ import * as I from '@/interface'
 import NewsRequest from '@/request/news'
 import NewsItem from '@/shared/components/NewsItem'
 import Filter from '@/shared/components/Filter'
-import SearchLabel from '@/shared/components/SearchLabel'
 import Pagination from '@/shared/components/Pagination'
 import { setNewsRefetch } from '@/store/action'
 
-const Home = (): JSX.Element => {
+interface Props {
+  userId: number
+}
+
+const UserNewsList = (props: Props): JSX.Element => {
+  const { userId } = props
   const initialSort = 'published'
   const initialOrder = 'desc'
-  const limit = 15
+  const limit = 8
 
   const params = useLocation()
   const dispatch = useDispatch()
@@ -59,7 +62,7 @@ const Home = (): JSX.Element => {
   )
 
   const getNews = useCallback(async () => {
-    const result = await NewsRequest.index({
+    const result = await NewsRequest.ownByUser(userId, {
       order,
       sort,
       limit,
@@ -68,7 +71,7 @@ const Home = (): JSX.Element => {
     })
 
     return result
-  }, [order, sort, limit, page, query])
+  }, [order, sort, limit, page, query, userId])
 
   const updateNews = useCallback(
     (index: number, id: number, upvote: boolean): void => {
@@ -126,19 +129,7 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-      <Helmet>
-        <title>Hacker News 2.0</title>
-      </Helmet>
-
-      {query.q && <SearchLabel value={query.q as string} />}
-
       <Filter onChange={handleFilter} initialOrder={order} initialSort={sort} />
-
-      {!fetchReady && ready && news.length === 0 ? (
-        <div>No data found</div>
-      ) : (
-        ''
-      )}
 
       {ready &&
         news.map((item, index) => (
@@ -146,7 +137,7 @@ const Home = (): JSX.Element => {
             key={item.id}
             index={index}
             value={item}
-            showOwner={true}
+            showOwner={false}
             onVote={updateNews}
           />
         ))}
@@ -163,4 +154,4 @@ const Home = (): JSX.Element => {
   )
 }
 
-export default Home
+export default UserNewsList

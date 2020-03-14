@@ -21,6 +21,28 @@ class NewsRequest {
     })
   }
 
+  public static ownByUser(
+    userId: number,
+    filter: I.NewsFilter,
+  ): Promise<I.NewsFeed> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/user/${userId}/news`, {
+          params: {
+            sort: filter.sort,
+            order: filter.order,
+            limit: filter.limit,
+            offset: filter.offset,
+            search: filter.search,
+          },
+        })
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
+
   public static store(data: I.NewsInput): Promise<I.NewsFeed> {
     return new Promise((resolve, reject) => {
       axios
