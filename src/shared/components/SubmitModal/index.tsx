@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
+import produce from 'immer'
 import { useLocation } from 'react-router-dom'
-import { setSubmitModalShow, setNewsRefetch } from '@/store/action'
+import notifier from '@/lib/awn'
+import { setSubmitModalShow, setNewsRefetch, setUser } from '@/store/action'
 import * as I from '@/interface'
 import InvalidFeedback from '@/shared/components/InvalidFeedback'
 import NewsRequest from '@/request/news'
@@ -10,6 +12,9 @@ import NewsRequest from '@/request/news'
 const SubmitModal = (): JSX.Element => {
   const dispatch = useDispatch()
   const location = useLocation()
+  const user = useSelector<I.Redux.State, I.Entity.User>(
+    state => state.auth.user as I.Entity.User,
+  )
   const show = useSelector<I.Redux.State, boolean>(state => state.modal.submit)
   const handleHide = useCallback(() => dispatch(setSubmitModalShow(false)), [
     dispatch,
@@ -38,6 +43,16 @@ const SubmitModal = (): JSX.Element => {
     setUrlErr('')
   }, [])
 
+  const updateUser = useCallback(() => {
+    const newUser = produce(user, draft => {
+      const newsCount = draft.newsCount as number
+
+      draft.newsCount = newsCount + 1
+    })
+
+    dispatch(setUser(newUser))
+  }, [dispatch, user])
+
   const store = useCallback(async () => {
     await NewsRequest.store({
       title,
@@ -61,6 +76,9 @@ const SubmitModal = (): JSX.Element => {
             // reload news
             dispatch(setNewsRefetch(true))
           }
+
+          updateUser()
+          notifier.success('Post submitted')
         })
         .catch(err => {
           const { response } = err
@@ -72,7 +90,7 @@ const SubmitModal = (): JSX.Element => {
           }
         })
     }
-  }, [submited, store, handleHide, resetError, dispatch, location])
+  }, [submited, store, handleHide, resetError, dispatch, location, updateUser])
 
   return (
     <Modal show={show} onHide={handleHide}>

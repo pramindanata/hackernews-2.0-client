@@ -52,7 +52,7 @@ const NewsItem = (props: Props): JSX.Element => {
       .finally(() => {
         setVoting(false)
       })
-  }, [vote, index, value, onVote])
+  }, [vote, index, value, onVote, history, user])
 
   return (
     <div className={`p-2 border-bottom ${styles['news-item']}`}>
