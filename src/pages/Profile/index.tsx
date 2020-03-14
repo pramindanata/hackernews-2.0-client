@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Helmet } from 'react-helmet'
 import { Button } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import styles from '@/pages/Profile/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
-import { setSubmitModalShow } from '@/store/action'
+import { setSubmitModalShow, setEditProfileModalShow } from '@/store/action'
 
 import * as I from '@/interface'
 
 const Profile = (): JSX.Element => {
   const dispatch = useDispatch()
+  const showEditProfileModal = useCallback(
+    () => dispatch(setEditProfileModalShow(true)),
+    [dispatch],
+  )
   const user = useSelector<I.Redux.State, I.Entity.User>(
     state => state.auth.user as I.Entity.User,
   )
@@ -38,7 +42,9 @@ const Profile = (): JSX.Element => {
             <span>Joined at {timeDifferenceForDate(user.createdAt)}</span>
           </div>
 
-          <Button variant="primary">Edit Profile</Button>
+          <Button variant="primary" onClick={showEditProfileModal}>
+            Edit Profile
+          </Button>
         </div>
 
         <div>

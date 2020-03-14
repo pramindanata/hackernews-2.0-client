@@ -15,6 +15,11 @@ export const setSubmitModalShow = (value: boolean): any => ({
   payload: value,
 })
 
+export const setEditProfileModalShow = (value: boolean): any => ({
+  type: 'SET_EDIT_PROFILE_MODAL_SHOW',
+  payload: value,
+})
+
 export const setNewsRefetch = (value: boolean): any => ({
   type: 'SET_NEWS_REFETCH',
   payload: value,

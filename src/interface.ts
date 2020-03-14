@@ -47,6 +47,7 @@ export namespace Redux {
 
     export interface Modal {
       submit: boolean
+      editProfile: boolean
     }
 
     export interface News {

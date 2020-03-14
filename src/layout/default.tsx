@@ -1,10 +1,18 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Container } from 'react-bootstrap'
+
+import * as I from '@/interface'
 import Header from '@/shared/components/header'
 import Footer from '@/shared/components/Footer'
 import SubmitModal from '@/shared/components/SubmitModal'
+import EditProfileModal from '@/shared/components/EditProfileModal'
 
 const Default = (props: any): JSX.Element => {
+  const user = useSelector<I.Redux.State, I.Entity.User>(
+    state => state.auth.user as I.Entity.User,
+  )
+
   return (
     <>
       <Header />
@@ -14,6 +22,7 @@ const Default = (props: any): JSX.Element => {
       <Footer />
 
       <SubmitModal />
+      {user && <EditProfileModal />}
     </>
   )
 }
