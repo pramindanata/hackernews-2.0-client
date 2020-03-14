@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Nav } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import * as I from '@/interface'
+import { setSubmitModalShow } from '@/store/action'
 import styles from './style/navbar.module.css'
 
 const NavItems = (): JSX.Element => {
+  const dispatch = useDispatch()
+  const handleShow = useCallback(() => dispatch(setSubmitModalShow(true)), [
+    dispatch,
+  ])
   const user = useSelector<I.Redux.State, I.Entity.User | null>(
     state => state.auth.user,
   )
@@ -51,9 +56,7 @@ const NavItems = (): JSX.Element => {
       ) : (
         <>
           <Nav.Item>
-            <Nav.Link as={Link} to="/submit" eventKey="/submit">
-              Submit
-            </Nav.Link>
+            <Nav.Link onClick={handleShow}>Submit</Nav.Link>
           </Nav.Item>
 
           <Nav.Item>

@@ -25,6 +25,11 @@ export interface NewsFeed {
   data: Entity.News[]
 }
 
+export interface NewsInput {
+  title: string
+  url: string
+}
+
 export interface AuthPayload {
   token: string
 }
@@ -38,11 +43,21 @@ export namespace Redux {
     export interface Auth {
       user: Entity.User | null
     }
+
+    export interface Modal {
+      submit: boolean
+    }
+
+    export interface News {
+      refetch: boolean
+    }
   }
 
   export interface State {
     layout: Store.Layout
     auth: Store.Auth
+    modal: Store.Modal
+    news: Store.News
   }
 }
 

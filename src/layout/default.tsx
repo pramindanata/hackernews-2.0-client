@@ -2,6 +2,7 @@ import React from 'react'
 import { Container } from 'react-bootstrap'
 import Header from '@/shared/components/header'
 import Footer from '@/shared/components/Footer'
+import SubmitModal from '@/shared/components/SubmitModal'
 
 const Default = (props: any): JSX.Element => {
   return (
@@ -11,6 +12,8 @@ const Default = (props: any): JSX.Element => {
         {props.children}
       </Container>
       <Footer />
+
+      <SubmitModal />
     </>
   )
 }

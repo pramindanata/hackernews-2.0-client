@@ -1,69 +1,85 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Helmet } from 'react-helmet'
-import * as RI from '@/interface'
+import { useSelector, useDispatch } from 'react-redux'
+import * as I from '@/interface'
 import NewsRequest from '@/request/news'
 import NewsItem from '@/shared/components/NewsItem'
 import Filter from '@/shared/components/Filter'
 import Pagination from '@/shared/components/Pagination'
+import { setNewsRefetch } from '@/store/action'
 
 const Home = (): JSX.Element => {
   const initialSort = 'published'
   const initialOrder = 'desc'
   const limit = 10
 
+  const dispatch = useDispatch()
+  const refetch = useSelector<I.Redux.State, boolean>(
+    state => state.news.refetch,
+  )
   const [fetchReady, setFetchReady] = useState(false)
   const [ready, setReady] = useState(false)
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(0)
-  const [sort, setSort] = useState<RI.NewsFilter['sort']>(initialSort)
-  const [order, setOrder] = useState<RI.NewsFilter['order']>(initialOrder)
-  const [news, setNews] = useState<RI.Entity.News[]>([])
+  const [sort, setSort] = useState<I.NewsFilter['sort']>(initialSort)
+  const [order, setOrder] = useState<I.NewsFilter['order']>(initialOrder)
+  const [news, setNews] = useState<I.Entity.News[]>([])
 
-  const handleFilter = (
-    sort: RI.NewsFilter['sort'],
-    order: RI.NewsFilter['order'],
-  ): void => {
-    setSort(sort)
-    setOrder(order)
-  }
+  const handleFilter = useCallback(
+    (sort: I.NewsFilter['sort'], order: I.NewsFilter['order']): void => {
+      setSort(sort)
+      setOrder(order)
+      setPage(0)
 
-  const handlePagination = (selectedItem: { selected: number }): void => {
-    setPage(selectedItem.selected)
-  }
+      setFetchReady(true)
+    },
+    [],
+  )
+
+  const handlePagination = useCallback(
+    (selectedItem: { selected: number }): void => {
+      setPage(selectedItem.selected)
+      setFetchReady(true)
+    },
+    [],
+  )
+
+  const getNews = useCallback(async () => {
+    const result = await NewsRequest.index({
+      order,
+      sort,
+      limit,
+      offset: page * limit,
+    })
+
+    return result
+  }, [order, sort, limit, page])
 
   useEffect(() => {
-    async function fetch(): Promise<void> {
-      const result = await NewsRequest.index({
-        order,
-        sort,
-        limit,
-        offset: page * limit,
-      })
-
-      setReady(true)
-      setTotal(result.total)
-      setNews(result.data)
+    if (refetch) {
+      setSort(initialSort)
+      setOrder(initialOrder)
+      setPage(0)
+      setFetchReady(true)
+      dispatch(setNewsRefetch(false))
     }
+  }, [refetch, dispatch])
 
+  useEffect(() => {
     if (fetchReady) {
-      fetch()
-      setFetchReady(false)
+      getNews().then(res => {
+        setReady(true)
+        setTotal(res.total)
+        setNews(res.data)
+        setFetchReady(false)
+      })
     }
-  }, [fetchReady, sort, order, page])
+  }, [fetchReady, getNews])
 
   useEffect(() => {
     setPageCount(Math.ceil(total / limit))
   }, [total])
-
-  useEffect(() => {
-    setPage(0)
-    setFetchReady(true)
-  }, [order, sort])
-
-  useEffect(() => {
-    setFetchReady(true)
-  }, [page])
 
   return (
     <>
@@ -78,8 +94,8 @@ const Home = (): JSX.Element => {
       <div className="mt-4">
         <Pagination
           pageCount={pageCount}
-          forcePage={page}
           initialPage={0}
+          forcePage={page}
           onPageChange={handlePagination}
         />
       </div>

@@ -19,6 +19,20 @@ class NewsRequest {
         .catch(err => reject(err))
     })
   }
+
+  public static store(data: I.NewsInput): Promise<I.NewsFeed> {
+    return new Promise((resolve, reject) => {
+      axios
+        .post('/news', {
+          title: data.title,
+          url: data.url,
+        })
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => reject(err))
+    })
+  }
 }
 
 export default NewsRequest
