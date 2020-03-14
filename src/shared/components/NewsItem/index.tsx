@@ -61,7 +61,6 @@ const NewsItem = (props: Props): JSX.Element => {
           variant={value.upvoted ? 'primary' : 'light'}
           active={!voting && value.upvoted}
           size="sm"
-          className="rounded-circle"
           disabled={voting}
           onClick={handleClick}
         >

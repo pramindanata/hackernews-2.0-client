@@ -1,9 +1,10 @@
 @import "~axios-progress-bar/dist/nprogress.css";
 @import "./variables.scss";
 
-$loading-color: #fff;
+$loading-color: map-get($map: $app-colors, $key: "secondary");
 
 #nprogress .bar {
+  position: static;
   background: $loading-color !important;
   height: 3px!important;
 }
