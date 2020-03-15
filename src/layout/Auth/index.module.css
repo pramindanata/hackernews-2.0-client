@@ -1,0 +1,22 @@
+.wrapper {
+  flex: 1;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  color: #ff6600;
+  text-decoration: none!important;
+}
+
+.header:hover {
+  color: #ff6600;
+}
+
+.copyright {
+  font-family: sans-serif;
+}

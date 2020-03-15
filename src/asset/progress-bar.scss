@@ -1,0 +1,19 @@
+@import "~axios-progress-bar/dist/nprogress.css";
+@import "./variables.scss";
+
+$loading-color: map-get($map: $app-colors, $key: "secondary");
+
+#nprogress .bar {
+  position: static;
+  background: $loading-color !important;
+  height: 3px!important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px $loading-color, 0 0 5px $loading-color !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: $loading-color !important;
+  border-left-color: $loading-color !important;
+}
