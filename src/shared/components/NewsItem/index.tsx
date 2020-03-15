@@ -63,7 +63,7 @@ const NewsItem = (props: Props): JSX.Element => {
       .finally(() => {
         setVoting(false)
       })
-  }, [vote, index, value, onVote, user])
+  }, [vote, index, value, onVote])
 
   const handleRemove = useCallback(() => {
     notifier.confirm('Are you sure want to remove this data ?', () => {
