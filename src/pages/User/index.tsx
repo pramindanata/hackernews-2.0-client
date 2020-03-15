@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import styles from '@/pages/Profile/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
@@ -44,7 +45,7 @@ const Detail = (props: DetailProps): JSX.Element => {
 
         <div>
           {(user.newsCount as number) === 0 ? (
-            <p>You don&apos;t have any post. </p>
+            <p>This user don&apos;t have any posts.</p>
           ) : (
             <NewsList showAction={false} user={user as I.Entity.User} />
           )}
@@ -56,6 +57,9 @@ const Detail = (props: DetailProps): JSX.Element => {
 
 const Profile = (): JSX.Element => {
   const params = useParams<{ id: string }>()
+  const authUser = useSelector<I.Redux.State>(
+    state => state.auth.user,
+  ) as I.Entity.User
   const [user, setUser] = useState<I.Entity.User>()
 
   return (
@@ -64,12 +68,16 @@ const Profile = (): JSX.Element => {
         <title>{user ? `${user.username}'s profile` : 'User profile'}</title>
       </Helmet>
 
-      <Fetch
-        request={(): Promise<any> => UserRequest.show(params.id)}
-        onSuccess={(data): void => setUser(data)}
-      >
-        <Detail user={user as I.Entity.User} />
-      </Fetch>
+      {authUser.id !== +params.id ? (
+        <Fetch
+          request={(): Promise<any> => UserRequest.show(params.id)}
+          onSuccess={(data): void => setUser(data)}
+        >
+          <Detail user={user as I.Entity.User} />
+        </Fetch>
+      ) : (
+        <Redirect to="/profile" />
+      )}
     </>
   )
 }
