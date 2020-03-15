@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
 import * as I from '@/interface'
 import styles from '@/shared/components/NewsItem/index.module.css'
 import { timeDifferenceForDate } from '@/util/time'
@@ -21,7 +22,6 @@ interface Props {
 
 const NewsItem = (props: Props): JSX.Element => {
   const dispatch = useDispatch()
-  const history = useHistory()
   const {
     value,
     index,
@@ -54,10 +54,6 @@ const NewsItem = (props: Props): JSX.Element => {
   }, [value])
 
   const handleVote = useCallback(() => {
-    if (!user) {
-      history.push('/login')
-    }
-
     setVoting(true)
 
     vote()
@@ -67,7 +63,7 @@ const NewsItem = (props: Props): JSX.Element => {
       .finally(() => {
         setVoting(false)
       })
-  }, [vote, index, value, onVote, history, user])
+  }, [vote, index, value, onVote, user])
 
   const handleRemove = useCallback(() => {
     notifier.confirm('Are you sure want to remove this data ?', () => {
@@ -98,20 +94,34 @@ const NewsItem = (props: Props): JSX.Element => {
     )
   }, [dispatch, value])
 
+  const setUserLink = useCallback(() => {
+    if (user && user.id === value.user?.id) {
+      return '/profile'
+    }
+
+    return `/user/${value.user?.id}`
+  }, [user, value])
+
   return (
     <div className={`p-2 border-bottom ${styles['news-item']}`}>
       {/* Main */}
       <div className="d-flex align-items-center">
         <div className="mr-3">
-          <Button
-            variant={value.upvoted ? 'primary' : 'light'}
-            active={!voting && value.upvoted}
-            size="sm"
-            disabled={voting}
-            onClick={handleVote}
-          >
-            <i className="i-arrow-up" />
-          </Button>
+          {user ? (
+            <Button
+              variant={value.upvoted ? 'primary' : 'light'}
+              active={!voting && value.upvoted}
+              size="sm"
+              disabled={voting}
+              onClick={handleVote}
+            >
+              <i className="i-arrow-up" />
+            </Button>
+          ) : (
+            <Button as={Link} to="/login" variant="light" size="sm">
+              <i className="i-arrow-up" />
+            </Button>
+          )}
         </div>
 
         <div>
@@ -133,14 +143,14 @@ const NewsItem = (props: Props): JSX.Element => {
               <>
                 {' '}
                 by{' '}
-                <a
-                  href="/"
+                <Link
+                  to={setUserLink()}
                   className={`${
                     isMine() ? 'text-primary' : 'text-muted'
                   } font-weight-bold`}
                 >
                   {value.user?.username}
-                </a>{' '}
+                </Link>{' '}
                 on
               </>
             ) : (

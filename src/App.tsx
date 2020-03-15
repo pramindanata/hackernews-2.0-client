@@ -15,6 +15,7 @@ const Home = loadable(() => import('@/pages/Home'))
 const Login = loadable(() => import('@/pages/Login'))
 const Profile = loadable(() => import('@/pages/Profile'))
 const Register = loadable(() => import('@/pages/Register'))
+const User = loadable(() => import('@/pages/User'))
 const NoMatch = loadable(() => import('@/pages/NoMatch'))
 
 const App = (): JSX.Element => {
@@ -59,6 +60,10 @@ const App = (): JSX.Element => {
       <Switch>
         <Route exact path="/">
           <Home />
+        </Route>
+
+        <Route exact path="/user/:id">
+          <User />
         </Route>
 
         <PrivateRoute exact path="/profile">

@@ -13,10 +13,12 @@ import { setNewsRefetch, setUser } from '@/store/action'
 
 interface Props {
   user: I.Entity.User
+  showOwner?: boolean
+  showAction?: boolean
 }
 
 const UserNewsList = (props: Props): JSX.Element => {
-  const { user } = props
+  const { user, showOwner, showAction } = props
   const initialSort = 'published'
   const initialOrder = 'desc'
   const limit = 8
@@ -148,8 +150,8 @@ const UserNewsList = (props: Props): JSX.Element => {
             key={item.id}
             index={index}
             value={item}
-            showOwner={false}
-            showAction={true}
+            showOwner={showOwner !== undefined}
+            showAction={showAction === undefined}
             onRemove={handleDelete}
             onVote={updateNews}
           />
