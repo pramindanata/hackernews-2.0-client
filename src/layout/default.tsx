@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Container } from 'react-bootstrap'
 
 import * as I from '@/interface'
-import Header from '@/shared/components/header'
+import Header from '@/shared/components/Header'
 import Footer from '@/shared/components/Footer'
 import SubmitModal from '@/shared/components/SubmitModal'
 import EditProfileModal from '@/shared/components/EditProfileModal'
