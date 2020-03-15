@@ -15,6 +15,11 @@ const Filter = (props: Props): JSX.Element => {
   const [order, setOrder] = useState<I.NewsFilter['order']>(initialOrder)
 
   useEffect(() => {
+    setSort(initialSort)
+    setOrder(initialOrder)
+  }, [initialOrder, initialSort])
+
+  useEffect(() => {
     onChange(sort, order)
   }, [sort, order, onChange])
 
