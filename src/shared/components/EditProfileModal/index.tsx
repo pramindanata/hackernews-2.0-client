@@ -17,6 +17,12 @@ const EditProfileModal = (): JSX.Element => {
   )
 
   const form = useRef<any>(null)
+
+  /**
+   * `submitted` = to trigger useEffect
+   * `loading` = to prevent any dep's update trigger useEffect
+   */
+  const [loading, setLoading] = useState<boolean>(false)
   const [submited, setSubmited] = useState<boolean>(false)
   const [successAlert, setSuccessAlert] = useState<boolean>(false)
 
@@ -29,7 +35,9 @@ const EditProfileModal = (): JSX.Element => {
 
   const handleHide = useCallback(() => {
     dispatch(setEditProfileModalShow(false))
+  }, [dispatch])
 
+  const resetFields = useCallback(() => {
     setUsername(user.username)
     setEmail(user.email as string)
     setPassword('')
@@ -38,7 +46,7 @@ const EditProfileModal = (): JSX.Element => {
     setEmailErr('')
     setPasswordErr('')
     setSuccessAlert(false)
-  }, [dispatch, user])
+  }, [user])
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -70,14 +78,13 @@ const EditProfileModal = (): JSX.Element => {
   }, [username, email, password])
 
   useEffect(() => {
-    if (submited) {
+    if (submited && !loading) {
+      setLoading(true)
       setSuccessAlert(false)
       resetError()
 
       update()
         .then(() => {
-          setSubmited(false)
-          setPassword('')
           setSuccessAlert(true)
 
           updateUser()
@@ -86,18 +93,21 @@ const EditProfileModal = (): JSX.Element => {
           const { response } = err
 
           if (response.status === 422) {
-            setSubmited(false)
             const { body } = response.data.data
             setUsernameErr(body.username)
             setEmailErr(body.email)
             setPasswordErr(body.password)
           }
         })
+        .finally(() => {
+          setSubmited(false)
+          setLoading(false)
+        })
     }
-  }, [submited, update, handleHide, resetError, dispatch, updateUser])
+  }, [submited, loading, update, handleHide, resetError, dispatch, updateUser])
 
   return (
-    <Modal show={show} onHide={handleHide}>
+    <Modal show={show} onHide={handleHide} onShow={resetFields}>
       <Modal.Header closeButton>
         <Modal.Title as="h5">Edit Profile</Modal.Title>
       </Modal.Header>
@@ -152,8 +162,8 @@ const EditProfileModal = (): JSX.Element => {
           <Button variant="light" onClick={handleHide}>
             Close
           </Button>
-          <Button variant="secondary" type="submit">
-            Submit
+          <Button variant="secondary" type="submit" disabled={loading}>
+            {!loading ? 'Submit' : 'Loading'}
           </Button>
         </Modal.Footer>
       </Form>

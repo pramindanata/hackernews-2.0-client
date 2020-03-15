@@ -18,6 +18,12 @@ const SubmitModal = (): JSX.Element => {
   const show = useSelector<I.Redux.State, boolean>(state => state.modal.submit)
 
   const form = useRef<any>(null)
+
+  /**
+   * `submitted` = to trigger useEffect
+   * `loading` = to prevent any dep's update trigger useEffect
+   */
+  const [loading, setLoading] = useState<boolean>(false)
   const [submited, setSubmited] = useState<boolean>(false)
 
   const [title, setTitle] = useState<string>('')
@@ -36,12 +42,15 @@ const SubmitModal = (): JSX.Element => {
     setUrlErr('')
   }, [])
 
-  const handleHide = useCallback(() => {
+  const resetFields = useCallback(() => {
     resetError()
     setTitle('')
     setUrl('')
+  }, [resetError])
+
+  const handleHide = useCallback(() => {
     dispatch(setSubmitModalShow(false))
-  }, [dispatch, resetError])
+  }, [dispatch])
 
   const updateUser = useCallback(() => {
     const newUser = produce(user, draft => {
@@ -61,13 +70,12 @@ const SubmitModal = (): JSX.Element => {
   }, [title, url])
 
   useEffect(() => {
-    if (submited) {
+    if (submited && !loading) {
+      setLoading(true)
       resetError()
 
       store()
         .then(() => {
-          setTitle('')
-          setUrl('')
           handleHide()
 
           if (location.pathname === '/' || location.pathname === '/profile') {
@@ -89,12 +97,22 @@ const SubmitModal = (): JSX.Element => {
         })
         .finally(() => {
           setSubmited(false)
+          setLoading(false)
         })
     }
-  }, [submited, store, handleHide, resetError, dispatch, location, updateUser])
+  }, [
+    submited,
+    store,
+    loading,
+    handleHide,
+    resetError,
+    dispatch,
+    location,
+    updateUser,
+  ])
 
   return (
-    <Modal show={show} onHide={handleHide}>
+    <Modal show={show} onHide={handleHide} onShow={resetFields}>
       <Modal.Header closeButton>
         <Modal.Title as="h5">Submit</Modal.Title>
       </Modal.Header>
@@ -129,8 +147,8 @@ const SubmitModal = (): JSX.Element => {
           <Button variant="light" onClick={handleHide}>
             Close
           </Button>
-          <Button variant="secondary" type="submit">
-            Submit
+          <Button variant="secondary" type="submit" disabled={loading}>
+            {!loading ? 'Submit' : 'Loading'}
           </Button>
         </Modal.Footer>
       </Form>

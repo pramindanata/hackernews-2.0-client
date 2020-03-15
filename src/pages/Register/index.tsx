@@ -7,7 +7,13 @@ import AuthRequest from '@/request/auth'
 
 const Register = (): JSX.Element => {
   const [baseErrorMessage, setBaseErrorMessage] = useState('')
-  const [submited, setSubmited] = useState(false)
+
+  /**
+   * `submitted` = to trigger useEffect
+   * `loading` = to prevent any dep's update trigger useEffect
+   */
+  const [loading, setLoading] = useState<boolean>(false)
+  const [submited, setSubmited] = useState<boolean>(false)
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [email, setEmail] = useState<string>('')
@@ -52,15 +58,17 @@ const Register = (): JSX.Element => {
           setEmailErr(body.email)
           setPasswordErr(body.password)
         }
-
-        setSubmited(false)
       }
     }
 
-    if (submited) {
-      register()
+    if (submited && !loading) {
+      setLoading(true)
+      register().finally(() => {
+        setSubmited(false)
+        setLoading(false)
+      })
     }
-  }, [submited, username, password, email])
+  }, [submited, loading, username, password, email])
 
   return (
     <>
@@ -121,9 +129,9 @@ const Register = (): JSX.Element => {
                     variant="success"
                     block
                     type="submit"
-                    disabled={submited}
+                    disabled={loading}
                   >
-                    {submited ? 'Loading…' : 'Submit'}
+                    {loading ? 'Loading…' : 'Submit'}
                   </Button>
 
                   <div className="text-center my-3">

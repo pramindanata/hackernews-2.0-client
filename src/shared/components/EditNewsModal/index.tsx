@@ -19,6 +19,12 @@ const EditNewsModal = (): JSX.Element => {
   )
 
   const form = useRef<any>(null)
+
+  /**
+   * `submitted` = to trigger useEffect
+   * `loading` = to prevent any dep's update trigger useEffect
+   */
+  const [loading, setLoading] = useState<boolean>(false)
   const [submited, setSubmited] = useState<boolean>(false)
 
   const [title, setTitle] = useState<string>('')
@@ -39,13 +45,12 @@ const EditNewsModal = (): JSX.Element => {
   }, [])
 
   const handleHide = useCallback(() => {
-    resetError()
     dispatch(
       setEditNewsModalShow({
         active: false,
       }),
     )
-  }, [dispatch, resetError])
+  }, [dispatch])
 
   useEffect(() => {
     setTitle(news.title)
@@ -60,12 +65,12 @@ const EditNewsModal = (): JSX.Element => {
   }, [title, url, news])
 
   useEffect(() => {
-    if (submited) {
+    if (submited && !loading) {
+      setLoading(true)
       resetError()
 
       update()
         .then(() => {
-          setSubmited(false)
           handleHide()
 
           dispatch(setNewsRefetch(true))
@@ -83,12 +88,13 @@ const EditNewsModal = (): JSX.Element => {
         })
         .finally(() => {
           setSubmited(false)
+          setLoading(false)
         })
     }
-  }, [submited, update, handleHide, resetError, dispatch, location])
+  }, [submited, loading, update, handleHide, resetError, dispatch, location])
 
   return (
-    <Modal show={show} onHide={handleHide}>
+    <Modal show={show} onHide={handleHide} onShow={resetError}>
       <Modal.Header closeButton>
         <Modal.Title as="h5">Update Data</Modal.Title>
       </Modal.Header>
@@ -123,8 +129,8 @@ const EditNewsModal = (): JSX.Element => {
           <Button variant="light" onClick={handleHide}>
             Close
           </Button>
-          <Button variant="secondary" type="submit">
-            Submit
+          <Button variant="secondary" type="submit" disabled={loading}>
+            {!loading ? 'Submit' : 'Loading'}
           </Button>
         </Modal.Footer>
       </Form>
