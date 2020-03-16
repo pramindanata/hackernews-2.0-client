@@ -151,7 +151,6 @@ const NewsItem = (props: Props): JSX.Element => {
                 >
                   {value.user?.username}
                 </Link>{' '}
-                on
               </>
             ) : (
               <span className="mx-2">-</span>
