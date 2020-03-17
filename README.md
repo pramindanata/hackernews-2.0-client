@@ -1,4 +1,17 @@
+# Hacker News 2.0 Client
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Prerequisite
+
+1. NodeJS >= v10.~
+2. NPM >= v6.~
+
+## Development
+
+1. Create `.env` file based from `.env.example` in this project root folder.
+2. Run `npm install` to install all depedencies.
+3. Run `npm run start` to start dev server. Make sure server app also running.
 
 ## Available Scripts
 
